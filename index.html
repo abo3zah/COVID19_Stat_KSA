@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,56 +9,56 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <title>KSA COVID-19 STATISTICS</title>
 </head>
+
 <body>
     <header>
-        
+
     </header>
     <div ng-app="myApp" ng-controller="statistics" class="container-xl text-center">
-        <canvas id="canvasLinear"><p>Your browser does not support the canvas element.</p></canvas>
+        <canvas id="canvasLinear">
+            <p>Your browser does not support the canvas element.</p>
+        </canvas>
         <hr>
-        <canvas id="canvasLog"><p>Your browser does not support the canvas element.</p></canvas>
+        <canvas id="canvasLog">
+            <p>Your browser does not support the canvas element.</p>
+        </canvas>
         <hr>
-        <canvas id="canvasNewCases"><p>Your browser does not support the canvas element.</p></canvas>
+        <canvas id="canvasNewCases">
+            <p>Your browser does not support the canvas element.</p>
+        </canvas>
         <hr>
         <table class='table-bordered table-hover col-lg-12 col-md-12 col-xl-12'>
-          <thead class='thead-dark'>
-            <tr>
-              <th>Data</th>
-              <th>Confirmed Cases</th>
-              <th>Deaths</th>
-              <th>Recovered</th>
-              <th>New Cases</th>
-              <th>ActiveCases</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="x in data">
-              <td>{{ x.Reportdt }}</td>
-              <td>{{ x.Confirmed }}</td>
-              <td>{{ x.Deaths }}</td>
-              <td>{{ x.Recovered }}</td>
-              <td>{{ x.newCases }}</td>
-              <td>{{ x.activeCases }}</td>
-            </tr>
-          </tbody>
+            <thead class='thead-dark'>
+                <tr>
+                    <th>Data</th>
+                    <th>Confirmed Cases</th>
+                    <th>Deaths</th>
+                    <th>Recovered</th>
+                    <th>New Cases</th>
+                    <th>ActiveCases</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in data">
+                    <td>{{ x.Reportdt }}</td>
+                    <td>{{ x.Confirmed }}</td>
+                    <td>{{ x.Deaths }}</td>
+                    <td>{{ x.Recovered }}</td>
+                    <td>{{ x.newCases }}</td>
+                    <td>{{ x.activeCases }}</td>
+                </tr>
+            </tbody>
         </table>
-      </div>
-      <script src="myApp.js"></script>
-      <script src="myCtrl.js"></script>
+        <br>
+    </div>
+    <script src="myApp.js"></script>
+    <script src="myCtrl.js"></script>
 </body>
+
 </html>

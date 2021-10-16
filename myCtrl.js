@@ -268,9 +268,6 @@ app.controller("statistics", function ($scope, $http) {
       },
       stacked: false,
       plugins: {
-        legend: {
-          position: 'right',
-        },
         title: {
           display: true,
           text: 'COVID-19 New Cases Graph',
