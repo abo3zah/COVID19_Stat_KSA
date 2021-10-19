@@ -1,0 +1,12 @@
+.sortOrder:after {
+    content: '\25b2'
+}
+
+.sortOrder.reverse:after {
+    content: '\25bc'
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+}
