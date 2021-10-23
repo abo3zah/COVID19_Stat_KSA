@@ -24,24 +24,36 @@
 
     </header>
     <div ng-app="myApp" ng-controller="statistics" class="m-5 text-center">
-        <canvas id="canvasLinear" width="6" height="2">
-            <p>Your browser does not support the canvas element.</p>
-        </canvas>
-        <hr>
-        <canvas id="canvasLog" width="6" height="2">
-            <p>Your browser does not support the canvas element.</p>
-        </canvas>
-        <hr>
 
-        <canvas id="canvasActiveCases" width="6" height="2">
-            <p>Your browser does not support the canvas element.</p>
-        </canvas>
-        <hr>
-        
-        <canvas id="canvasNewCases" width="6" height="2">
-            <p>Your browser does not support the canvas element.</p>
-        </canvas>
-        <hr>
+        <div class="graphSection">
+            <div>
+                <canvas id="canvasLinear">
+                    <p>Your browser does not support the canvas element.</p>
+                </canvas>
+                <hr>
+            </div>
+
+            <div>
+                <canvas id="canvasLog">
+                    <p>Your browser does not support the canvas element.</p>
+                </canvas>
+                <hr>
+            </div>
+
+            <div>
+                <canvas id="canvasActiveCases">
+                    <p>Your browser does not support the canvas element.</p>
+                </canvas>
+                <hr>
+            </div>
+            
+            <div>
+                <canvas id="canvasNewCases">
+                    <p>Your browser does not support the canvas element.</p>
+                </canvas>
+                <hr>
+            </div>
+        </div>
 
         <table class='table-bordered table-hover'>
             <thead class='thead-dark'>

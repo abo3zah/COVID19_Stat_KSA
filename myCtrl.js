@@ -19,26 +19,26 @@ app.controller("statistics", function ($scope, $http) {
       response.data.features.forEach(x => {
         //fix the date column
         date = new Date(x.attributes.Reportdt)
-        x.attributes.Reportdt = date.toJSON().slice(0,10);
+        x.attributes.Reportdt = date.toJSON().slice(0, 10);
 
         //generate new cases columns
-        if (prevCases == null){
+        if (prevCases == null) {
           x.attributes.newCases = 1;
-        }else{
+        } else {
           x.attributes.newCases = x.attributes.Confirmed - prevCases;
         }
 
         //generate death cases columns
-        if (prevDeathCases == null){
+        if (prevDeathCases == null) {
           x.attributes.newDeathCases = 0;
-        }else{
+        } else {
           x.attributes.newDeathCases = x.attributes.Deaths - prevDeathCases;
         }
 
         //generate recovered cases columns
-        if (prevRecoveredCases == null){
+        if (prevRecoveredCases == null) {
           x.attributes.newRecoveredCases = 0;
-        }else{
+        } else {
           x.attributes.newRecoveredCases = x.attributes.Recovered - prevRecoveredCases;
         }
 
@@ -58,68 +58,140 @@ app.controller("statistics", function ($scope, $http) {
       $scope.data = data;
 
       //draw the linear graph
-      $scope.drawChartLinear(data);
+      $scope.drawChart(
+        [
+          {
+            title:'Confirmed Cases',
+            data: data.map((e) => e.Confirmed),
+            color: $scope.color1
+          },
+          {
+            title:'Recovered Cases',
+            data: data.map((e) => e.Recovered),
+            color: $scope.color2
+          },
+          {
+            title:'Deaths Cases',
+            data: data.map((e) => e.Deaths),
+            color: $scope.color3
+          }
+        ],
+        data.map((e) => e.Reportdt),
+        'Date',
+        '# of Cases',
+        'COVID-19 Accumulated Graph',
+        'canvasLinear'
+      );
 
       //draw the log graph
-      $scope.drawChartLog(data);
+      $scope.drawChart(
+        [
+          {
+            title:'Confirmed Cases',
+            data: data.map((e) => e.Confirmed),
+            color: $scope.color1
+          },
+          {
+            title:'Recovered Cases',
+            data: data.map((e) => e.Recovered),
+            color: $scope.color2
+          },
+          {
+            title:'Deaths Cases',
+            data: data.map((e) => e.Deaths),
+            color: $scope.color3
+          }
+        ],
+        data.map((e) => e.Reportdt),
+        'Date',
+        '# of Cases',
+        'COVID-19 Accumulated Graph',
+        'canvasLog',
+        'logarithmic'
+      );
 
       //draw the Active cases graph
-      $scope.drawChartActiveCases(data);
+      $scope.drawChart(
+        [
+          {
+            title:'Active Cases',
+            data: data.map((e) => e.activeCases),
+            color: $scope.color1
+          }
+        ],
+        data.map((e) => e.Reportdt),
+        'Date',
+        '# of Cases',
+        'COVID-19 Active Cases Graph',
+        'canvasActiveCases',
+      );
 
       //draw the new cases graph
-      $scope.drawChartNewCases(data);
+      $scope.drawChart(
+        [
+          {
+            title:'New Confirmed Cases',
+            data: data.map((e) => e.newCases),
+            color: $scope.color1
+          },
+          {
+            title:'New Recovered Cases',
+            data: data.map((e) => e.newRecoveredCases),
+            color: $scope.color2
+          },
+          {
+            title:'New Death Cases',
+            data: data.map((e) => e.newDeathCases),
+            color: $scope.color3
+          }
+        ],
+        data.map((e) => e.Reportdt),
+        'Date',
+        '# of Cases',
+        'COVID-19 New Cases Graph',
+        'canvasNewCases',
+      );
     });
 
-  $scope.drawChartLinear = function (data) {
+  $scope.drawChart = function (yAxisData, xAxisData, xAxisName, yAxisName, graphTitle, canvasId, graphType = 'linear') {
 
     var scales = {
-      x:{
+      x: {
         title: {
           display: true,
-          text: 'Date',
+          text: xAxisName,
           font: {
-            family: 'Comic Sans MS',
+            family: 'Helvetica',
             size: 20,
-            weight: 'bold',
             lineHeight: 1.2,
           },
         }
       },
       y: {
-        type: 'linear',
+        type: graphType,
         display: true,
         title: {
           display: true,
-          text: '# of Cases',
+          text: yAxisName,
           font: {
-            family: 'Comic Sans MS',
+            family: 'Helvetica',
             size: 20,
-            weight: 'bold',
             lineHeight: 1.2,
           },
         }
       }
     };
 
-    var datasets = [{
-        label: 'Confirmed Cases',
-        data: data.map((e) => e.Confirmed),
-        backgroundColor: $scope.color1,
-        borderColor: $scope.color1,
-      },
-      {
-        label: 'Recovered Cases',
-        data: data.map((e) => e.Recovered),
-        backgroundColor: $scope.color2,
-        borderColor: $scope.color2,
-      },
-      {
-        label: 'Deaths Cases',
-        data: data.map((e) => e.Deaths),
-        backgroundColor: $scope.color3,
-        borderColor: $scope.color3,
-      }
-    ]
+    var datasets = [];
+
+    for (obj of yAxisData){
+      datasets.push({
+        label: obj.title,
+        data: obj.data,
+        backgroundColor: obj.color,
+        borderColor: obj.color,
+      })
+    }
 
     var options = {
       responsive: true,
@@ -130,13 +202,14 @@ app.controller("statistics", function ($scope, $http) {
       stacked: false,
       plugins: {
         legend: {
+          display: yAxisData.length==1?false:true,
           position: 'right',
         },
         title: {
           display: true,
-          text: 'COVID-19 Accumulated Graph',
+          text: graphTitle,
           font: {
-            family: 'Comic Sans MS',
+            family: 'Helvetica',
             size: 24,
             weight: 'bold',
             lineHeight: 1.2,
@@ -146,261 +219,21 @@ app.controller("statistics", function ($scope, $http) {
       scales: scales
     }
 
-
     var config1 = {
       type: 'line',
       data: {
-        labels: data.map((e) => e.Reportdt),
+        labels: xAxisData,
         datasets: datasets
       },
       options: options
     };
 
-    var chart1 = new Chart(document.getElementById('canvasLinear'), config1);
-  }
-
-  $scope.drawChartLog = function (data) {
-
-    var scales = {
-      x:{
-        title: {
-          display: true,
-          text: 'Date',
-          font: {
-            family: 'Comic Sans MS',
-            size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      },
-      y: {
-        type: 'logarithmic',
-        display: true,
-        title: {
-          display: true,
-          text: '# of Cases',
-          font: {
-            family: 'Comic Sans MS',
-            size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      }
-    };
-
-    var datasets = [{
-        label: 'Confirmed Cases',
-        data: data.map((e) => e.Confirmed),
-        backgroundColor: $scope.color1,
-        borderColor: $scope.color1,
-      },
-      {
-        label: 'Recovered Cases',
-        data: data.map((e) => e.Recovered),
-        backgroundColor: $scope.color2,
-        borderColor: $scope.color2,
-      },
-      {
-        label: 'Deaths Cases',
-        data: data.map((e) => e.Deaths),
-        backgroundColor: $scope.color3,
-        borderColor: $scope.color3,
-      }
-    ]
-
-    var options = {
-      responsive: true,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
-      stacked: false,
-      plugins: {
-        legend: {
-          position: 'right',
-        },
-        title: {
-          display: true,
-          text: 'COVID-19 Logarithmic Graph',
-          font: {
-            family: 'Comic Sans MS',
-            size: 24,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      },
-      scales: scales
-    }
-
-
-    var config1 = {
-      type: 'line',
-      data: {
-        labels: data.map((e) => e.Reportdt),
-        datasets: datasets
-      },
-      options: options
-    };
-
-    var chart1 = new Chart(document.getElementById('canvasLog'), config1);
-  }
-
-  //draw the Active cases graph
-  $scope.drawChartActiveCases = function (data) {
-
-    var scales = {
-      x:{
-        title: {
-          display: true,
-          text: 'Date',
-          font: {
-            family: 'Comic Sans MS',
-            size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      },
-      y: {
-        type: 'linear',
-        display: true,
-        title: {
-          display: true,
-          text: '# of Cases',
-          font: {
-            family: 'Comic Sans MS',
-            size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      }
-    };
-
-    var datasets = [{
-        label: 'Active Cases',
-        data: data.map((e) => e.activeCases),
-        backgroundColor: $scope.color1,
-        borderColor: $scope.color1,
-      }
-    ]
-
-    var options = {
-      responsive: true,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
-      stacked: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'COVID-19 Active Cases Graph',
-          font: {
-            family: 'Comic Sans MS',
-            size: 24,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      },
-      scales: scales
-    }
-
-
-    var config1 = {
-      type: 'line',
-      data: {
-        labels: data.map((e) => e.Reportdt),
-        datasets: datasets
-      },
-      options: options
-    };
-
-    var chart1 = new Chart(document.getElementById('canvasActiveCases'), config1);
-  }
-
-  //draw the new cases graph
-  $scope.drawChartNewCases = function (data) {
-
-    var scales = {
-      x:{
-        title: {
-          display: true,
-          text: 'Date',
-          font: {
-            family: 'Comic Sans MS',
-            size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      },
-      y: {
-        type: 'linear',
-        display: true,
-        title: {
-          display: true,
-          text: '# of Cases',
-          font: {
-            family: 'Comic Sans MS',
-            size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      }
-    };
-
-    var datasets = [{
-        label: 'New Cases',
-        data: data.map((e) => e.newCases),
-        backgroundColor: $scope.color1,
-        borderColor: $scope.color1,
-      }
-    ]
-
-    var options = {
-      responsive: true,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
-      stacked: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'COVID-19 New Cases Graph',
-          font: {
-            family: 'Comic Sans MS',
-            size: 24,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-        }
-      },
-      scales: scales
-    }
-
-
-    var config1 = {
-      type: 'line',
-      data: {
-        labels: data.map((e) => e.Reportdt),
-        datasets: datasets
-      },
-      options: options
-    };
-
-    var chart1 = new Chart(document.getElementById('canvasNewCases'), config1);
+    var chart1 = new Chart(document.getElementById(canvasId), config1);
   }
 
   //sort table by
-  $scope.sortBy = function(propertyName){
-    $scope.reverse = ($scope.propertyName === propertyName)? !$scope.reverse : false;
+  $scope.sortBy = function (propertyName) {
+    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
     $scope.propertyName = propertyName;
   }
 });

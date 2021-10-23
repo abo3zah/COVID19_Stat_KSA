@@ -10,3 +10,30 @@ table {
     table-layout: fixed;
     width: 100%;
 }
+
+.graphSection {
+    column-count: 2;
+    row-gap: 10px;
+    column-gap: 10px;
+    width: 100%;
+    height: 100%;
+    column-rule-style: solid;
+    column-rule-color: lightgray;
+}
+
+@media only screen and (max-width: 1000px) {
+    .graphSection {
+        column-count: 1;
+        row-gap: 10px;
+        column-gap: 10px;
+        width: 1000px;
+        height: 100%;
+        column-rule-style: solid;
+        column-rule-color: lightgray;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 1000px;
+    }
+}
