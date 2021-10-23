@@ -39,6 +39,9 @@ function drawChart(yAxisData, xAxisData, xAxisName, yAxisName, graphTitle, canva
     }
 
     var options = {
+        layout: {
+            right: 20
+        },
         responsive: true,
         interaction: {
             mode: 'index',
