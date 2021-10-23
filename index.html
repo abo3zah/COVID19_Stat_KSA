@@ -1,122 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="icon" type="image/png" href="img/favicon.ico">
+        <link rel="stylesheet" href="styles/style.css">
 
-    <link rel="icon" type="image/png" href="favicon.ico">
-    <link rel="stylesheet" href="style.css">
+        <title>KSA COVID-19 STATISTICS</title>
+    </head>
 
-    <title>KSA COVID-19 STATISTICS</title>
-</head>
+    <body>
+        <header>
 
-<body>
-    <header>
+        </header>
+        <div ng-app="myApp" ng-controller="statistics" class="m-5 text-center">
 
-    </header>
-    <div ng-app="myApp" ng-controller="statistics" class="m-5 text-center">
+            <div ng-show='show'>
+                <div class="graphSection">
+                    <div>
+                        <canvas id="canvasLinear">
+                            <p>Your browser does not support the canvas element.</p>
+                        </canvas>
+                        <hr>
+                    </div>
+                    <div>
+                        <canvas id="canvasVacin">
+                            <p>Your browser does not support the canvas element.</p>
+                        </canvas>
+                        <hr>
+                    </div>
+                    <div>
+                        <canvas id="canvasActiveCases">
+                            <p>Your browser does not support the canvas element.</p>
+                        </canvas>
+                        <hr>
+                    </div>
 
-        <div class="graphSection">
-            <div>
-                <canvas id="canvasLinear">
-                    <p>Your browser does not support the canvas element.</p>
-                </canvas>
-                <hr>
+                    <div>
+                        <canvas id="canvasNewCases">
+                            <p>Your browser does not support the canvas element.</p>
+                        </canvas>
+                        <hr>
+                    </div>
+                </div>
+                <table class='table-bordered table-hover'>
+                    <thead class='thead-dark'>
+                        <tr>
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Reportdt')">
+                                Date
+                                <span class="sortOrder" ng-show="propertyName === 'Reportdt'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Confirmed')">
+                                Confirmed Cases
+                                <span class="sortOrder" ng-show="propertyName === 'Confirmed'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Deaths')">
+                                Deaths
+                                <span class="sortOrder" ng-show="propertyName === 'Deaths'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Recovered')">
+                                Recovered
+                                <span class="sortOrder" ng-show="propertyName === 'Recovered'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('newCases')">
+                                New Confirmed Cases
+                                <span class="sortOrder" ng-show="propertyName === 'newCases'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('newRecoveredCases')">
+                                New Recovered Cases
+                                <span class="sortOrder" ng-show="propertyName === 'newRecoveredCases'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('newDeathCases')">
+                                New Death Cases
+                                <span class="sortOrder" ng-show="propertyName === 'newDeathCases'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+
+                            <th style='background-color:#1e88e5; color:white' ng-click="sortBy('activeCases')">
+                                ActiveCases
+                                <span class="sortOrder" ng-show="propertyName === 'activeCases'"
+                                    ng-class="{reverse: reverse}"></span>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in casesData | orderBy:propertyName:reverse">
+                            <td>{{ x.Reportdt }}</td>
+                            <td>{{ x.Confirmed | number:0 }}</td>
+                            <td>{{ x.Deaths | number:0 }}</td>
+                            <td>{{ x.Recovered | number:0 }}</td>
+                            <td>{{ x.newCases | number:0 }}</td>
+                            <td>{{ x.newRecoveredCases | number:0 }}</td>
+                            <td>{{ x.newDeathCases | number:0 }}</td>
+                            <td>{{ x.activeCases | number:0 }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
             </div>
 
-            <div>
-                <canvas id="canvasLog">
-                    <p>Your browser does not support the canvas element.</p>
-                </canvas>
-                <hr>
-            </div>
-
-            <div>
-                <canvas id="canvasActiveCases">
-                    <p>Your browser does not support the canvas element.</p>
-                </canvas>
-                <hr>
-            </div>
-            
-            <div>
-                <canvas id="canvasNewCases">
-                    <p>Your browser does not support the canvas element.</p>
-                </canvas>
-                <hr>
+            <div id="loading" ng-show='!show'>
+                Loading...
+                <img id="loading-image" src="img/icons8-loading-64.png" alt="Loading..." />
             </div>
         </div>
-
-        <table class='table-bordered table-hover'>
-            <thead class='thead-dark'>
-                <tr>
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Reportdt')">
-                        Date
-                        <span class="sortOrder" ng-show="propertyName === 'Reportdt'" ng-class="{reverse: reverse}"></span>
-                    </th>
-                    
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Confirmed')">
-                        Confirmed Cases
-                        <span class="sortOrder" ng-show="propertyName === 'Confirmed'" ng-class="{reverse: reverse}"></span>
-                    </th>
-
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Deaths')">
-                        Deaths
-                        <span class="sortOrder" ng-show="propertyName === 'Deaths'" ng-class="{reverse: reverse}"></span>
-                    </th>
-
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('Recovered')">
-                        Recovered
-                        <span class="sortOrder" ng-show="propertyName === 'Recovered'" ng-class="{reverse: reverse}"></span>
-                    </th>
-                    
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('newCases')">
-                        New Confirmed Cases
-                        <span class="sortOrder" ng-show="propertyName === 'newCases'" ng-class="{reverse: reverse}"></span>
-                    </th>
-
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('newRecoveredCases')">
-                        New Recovered Cases
-                        <span class="sortOrder" ng-show="propertyName === 'newRecoveredCases'" ng-class="{reverse: reverse}"></span>
-                    </th>
-                    
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('newDeathCases')">
-                        New Death Cases
-                        <span class="sortOrder" ng-show="propertyName === 'newDeathCases'" ng-class="{reverse: reverse}"></span>
-                    </th>
-                    
-                    <th style='background-color:#1e88e5; color:white' ng-click="sortBy('activeCases')">
-                        ActiveCases
-                        <span class="sortOrder" ng-show="propertyName === 'activeCases'" ng-class="{reverse: reverse}"></span>
-                    </th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="x in data | orderBy:propertyName:reverse">
-                    <td>{{ x.Reportdt }}</td>
-                    <td>{{ x.Confirmed | number:0 }}</td>
-                    <td>{{ x.Deaths | number:0 }}</td>
-                    <td>{{ x.Recovered | number:0 }}</td>
-                    <td>{{ x.newCases | number:0 }}</td>
-                    <td>{{ x.newRecoveredCases | number:0 }}</td>
-                    <td>{{ x.newDeathCases | number:0 }}</td>
-                    <td>{{ x.activeCases | number:0 }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <br>
-    </div>
-    <script src="myApp.js"></script>
-    <script src="myCtrl.js"></script>
-</body>
+        
+        <a target="_blank" href="https://icons8.com/icon/9H9xAQbXYt18/loading">Loading</a> icon by <a target="_blank"
+        href="https://icons8.com">Icons8</a>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+        <script src="scripts/chartfunc.js"></script>
+        <script src="scripts/myApp.js"></script>
+        <script src="scripts/myCtrl.js"></script>
+    </body>
 
 </html>
